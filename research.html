@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Publications | Dr. Sathish Muthu</title>
-<meta name="description" content="Complete indexed publication record of Dr. Sathish Muthu — 378 indexed works across spine, regenerative medicine, systematic reviews, AI, and global health. Filter by theme, search, and sort.">
+<meta name="description" content="Complete indexed publication record of Dr. Sathish Muthu — 374 indexed works across spine, regenerative medicine, literature reviews, AI, and global health. Filter by theme, search, and sort.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -61,7 +61,7 @@ h1.rtitle{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2.2rem,5v
 <body>
 <nav id="nav">
   <div class="nav-inner">
-    <a href="index.html" class="brand"><span class="mark">SM</span> Sathish Muthu</a>
+    <a href="index.html" class="brand"><img src="public/logo.svg" class="logo-mark" alt="Sathish Muthu"></a>
     <div class="nav-links" id="navLinks">
       <a href="index.html#research" class="plain">Featured</a>
       <a href="index.html#network" class="plain">Network</a>
@@ -82,7 +82,7 @@ h1.rtitle{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2.2rem,5v
     <h1 class="rtitle">Complete <span class="sn">Publications</span></h1>
     <p class="rlede">The full indexed research record, consolidated from Scopus, PubMed, and Web of Science. Every paper is tagged to all research themes it touches — filter, search, and sort to explore.</p>
     <div class="rstats">
-      <div class="rstat"><div class="n" id="stTotal">378</div><div class="l">Indexed here</div></div>
+      <div class="rstat"><div class="n" id="stTotal">374</div><div class="l">Indexed here</div></div>
       <div class="rstat"><div class="n">480+</div><div class="l">Total (RG)</div></div>
       <div class="rstat"><div class="n">43</div><div class="l">h-index</div></div>
       <div class="rstat"><div class="n">26,897</div><div class="l">Citations</div></div>
@@ -118,9 +118,9 @@ h1.rtitle{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2.2rem,5v
 
 <footer>
   <div class="wrap">
-    <div class="brand"><span class="mark">SM</span> Dr. Sathish Muthu</div>
+    <div class="brand"><img src="public/logo.svg" class="logo-mark" alt=""> Dr. Sathish Muthu</div>
     <div>Full publication record · consolidated from indexed databases</div>
-    <div style="margin-top:8px"><a href="index.html">← Back to home</a> · Note: ~378 distinct works are indexed here (311 with full DOI links, plus theses, posters & older articles); the gap to the RG total of 480 is mostly supplementary data files, appendices, and preprint duplicates that RG counts separately. Those live on <a href="https://www.researchgate.net/profile/Sathish-Muthu" target="_blank" rel="noopener">ResearchGate</a>.</div>
+    <div style="margin-top:8px"><a href="index.html">← Back to home</a> · Note: ~374 distinct works are indexed here (358 with resolvable DOI links, plus theses, posters & older articles); the gap to the RG total of 480 is mostly supplementary data files, appendices, and preprint duplicates that RG counts separately. Those live on <a href="https://www.researchgate.net/profile/Sathish-Muthu" target="_blank" rel="noopener">ResearchGate</a>.</div>
   </div>
 </footer>
 
@@ -128,7 +128,7 @@ h1.rtitle{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2.2rem,5v
 <script>
 (function(){
   const D=window.SM_DATA||{pubs:[]};
-  const THEME_COLORS={"Spine":"#0e7c86","Regenerative Medicine":"#6a5acd","Systematic Reviews":"#d98a2b","Research Methodology":"#c0497f","AI in Healthcare":"#2b8a5a","GBD / Burden of Disease":"#3b6fd4","Knee & Cartilage":"#d5604a","Orthopaedic Rheumatology":"#9a7b2e","Trauma & General Ortho":"#5a6b78","Original Research":"#7a8a96"};
+  const THEME_COLORS={"Spine":"#0e7c86","Regenerative Medicine":"#6a5acd","Literature Reviews":"#d98a2b","Research Methodology":"#c0497f","AI in Healthcare":"#2b8a5a","GBD / Burden of Disease":"#3b6fd4","Knee & Cartilage":"#d5604a","Orthopaedic Rheumatology":"#9a7b2e","Trauma & General Ortho":"#5a6b78","Original Research":"#7a8a96"};
   const tc=t=>THEME_COLORS[t]||"#7a8a96";
   document.getElementById('yr');
   // nav + theme
@@ -148,7 +148,7 @@ h1.rtitle{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2.2rem,5v
 
   // theme counts
   const counts={};pubs.forEach(p=>(p.m||[]).forEach(t=>counts[t]=(counts[t]||0)+1));
-  const order=["Spine","Regenerative Medicine","Systematic Reviews","Research Methodology","AI in Healthcare","GBD / Burden of Disease","Knee & Cartilage","Orthopaedic Rheumatology","Trauma & General Ortho","Original Research"];
+  const order=["Spine","Regenerative Medicine","Literature Reviews","Research Methodology","AI in Healthcare","GBD / Burden of Disease","Knee & Cartilage","Orthopaedic Rheumatology","Trauma & General Ortho","Original Research"];
   const themes=order.filter(t=>counts[t]);
 
   let activeTheme="All", query="", sort="year", limit=40;

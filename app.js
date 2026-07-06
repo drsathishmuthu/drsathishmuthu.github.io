@@ -98,24 +98,38 @@
     const tip=document.getElementById('ccTip');
     function drawChart(){
       cc.innerHTML='';
-      const W=cc.clientWidth||760, H=280, padB=28, padT=20, padX=6;
+      const W=cc.clientWidth||760, H=300, padB=42, padT=34, padX=10;
       const maxV=Math.max(...vals,1);
-      const n=years.length, gap=6;
-      const bw=(W-padX*2)/n - gap;
+      const n=years.length, gap=Math.max(10,Math.min(26,(W/n)*0.34));
+      const slot=(W-padX*2)/n;
+      const bw=slot-gap;
+      // gradient + soft baseline
+      const defs=document.createElementNS(NS,'defs');
+      defs.innerHTML='<linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">'+
+        '<stop offset="0" stop-color="var(--teal)"/><stop offset="1" stop-color="var(--teal-deep)"/></linearGradient>';
+      cc.appendChild(defs);
+      // baseline
+      const base=document.createElementNS(NS,'line');
+      base.setAttribute('x1',padX);base.setAttribute('x2',W-padX);
+      base.setAttribute('y1',H-padB);base.setAttribute('y2',H-padB);
+      base.setAttribute('stroke','var(--line)');base.setAttribute('stroke-width','1');
+      cc.appendChild(base);
       years.forEach((y,i)=>{
-        const bh=Math.max(2,(vals[i]/maxV)*(H-padB-padT));
-        const x=padX+i*((W-padX*2)/n)+gap/2;
+        const bh=Math.max(3,(vals[i]/maxV)*(H-padB-padT));
+        const x=padX+i*slot+gap/2;
         const yTop=H-padB-bh;
         const bar=document.createElementNS(NS,'rect');
         bar.setAttribute('class','cc-bar');bar.setAttribute('x',x);bar.setAttribute('y',yTop);
-        bar.setAttribute('width',bw);bar.setAttribute('height',bh);bar.setAttribute('rx',3);
+        bar.setAttribute('width',bw);bar.setAttribute('height',bh);bar.setAttribute('rx',5);
+        bar.setAttribute('fill','url(#barGrad)');
         cc.appendChild(bar);
-        // value label on top
-        if(bw>16){const vl=document.createElementNS(NS,'text');vl.setAttribute('class','cc-bar-label');
-          vl.setAttribute('x',x+bw/2);vl.setAttribute('y',yTop-5);vl.textContent=vals[i]>=1000?(vals[i]/1000).toFixed(1)+'k':vals[i];cc.appendChild(vl);}
-        // year label (show every other if crowded)
-        if(n<=14||i%2===0){const yl=document.createElementNS(NS,'text');yl.setAttribute('class','cc-year');
-          yl.setAttribute('x',x+bw/2);yl.setAttribute('y',H-10);yl.textContent="'"+String(y).slice(2);cc.appendChild(yl);}
+        // exact count data label on top of each bar
+        const vl=document.createElementNS(NS,'text');vl.setAttribute('class','cc-bar-label');
+        vl.setAttribute('x',x+bw/2);vl.setAttribute('y',yTop-9);
+        vl.textContent=vals[i].toLocaleString();cc.appendChild(vl);
+        // full year label
+        const yl=document.createElementNS(NS,'text');yl.setAttribute('class','cc-year');
+        yl.setAttribute('x',x+bw/2);yl.setAttribute('y',H-16);yl.textContent=y;cc.appendChild(yl);
         // hover
         bar.addEventListener('mousemove',ev=>{const r=cc.getBoundingClientRect();
           tip.innerHTML=`<b>${y}</b> · ${vals[i].toLocaleString()} citations`;tip.style.opacity=1;
@@ -127,117 +141,182 @@
     let ct;addEventListener('resize',()=>{clearTimeout(ct);ct=setTimeout(drawChart,200);});
   }
 
-  /* ---------- CO-AUTHOR NETWORK (force sim) ---------- */
+  /* ---------- COLLABORATOR CHORD / RADIAL CONNECTIVITY ---------- */
   const svg=document.getElementById('network-svg');
-  if(svg && D.nodes.length){
+  if(svg && D.nodes && D.nodes.length){
     const tooltip=document.getElementById('netTooltip');
     const NS="http://www.w3.org/2000/svg";
-    let W=svg.clientWidth||900, H=560;
-    // central node = Sathish
-    const center={id:"__SM",name:"Sathish Muthu",count:Math.max(...D.nodes.map(n=>n.count)),theme:"Spine",center:true};
-    const nodes=[center, ...D.nodes.map(n=>({...n}))];
-    const maxC=Math.max(...D.nodes.map(n=>n.count));
-    const links=D.nodes.map(n=>({s:"__SM",t:n.id,w:n.count}));
-    const byId=Object.fromEntries(nodes.map(n=>[n.id,n]));
 
-    function radius(n){return n.center?26:6+Math.sqrt(n.count/maxC)*20;}
-    // init positions in a circle
-    nodes.forEach((n,i)=>{
-      if(n.center){n.x=W/2;n.y=H/2;}
-      else{const a=(i/nodes.length)*Math.PI*2;n.x=W/2+Math.cos(a)*(120+Math.random()*160);n.y=H/2+Math.sin(a)*(90+Math.random()*140);}
-      n.vx=0;n.vy=0;
+    // group colours
+    const GROUP_COLORS={
+      'ORG':'#0e7c86',
+      'AO Spine KFD':'#7c5ccb',
+      'GBD Study':'#c98a2b',
+      'Regenerative / Intl':'#2aa5a0'
+    };
+    const GROUP_ORDER=['ORG','AO Spine KFD','GBD Study','Regenerative / Intl'];
+
+    // prepare collaborators sorted by group then count desc
+    const collabs=D.nodes.map(n=>({...n,group:n.group||'Regenerative / Intl'}));
+    const groups=GROUP_ORDER.filter(g=>collabs.some(c=>c.group===g));
+    collabs.sort((a,b)=>{
+      const ga=GROUP_ORDER.indexOf(a.group), gb=GROUP_ORDER.indexOf(b.group);
+      if(ga!==gb) return ga-gb;
+      return b.count-a.count;
     });
+    const maxC=Math.max(...collabs.map(c=>c.count));
+    let activeGroup=null;
 
-    let activeTheme=null, dragNode=null, raf=null;
-
-    // build DOM
-    let gLinks=document.createElementNS(NS,'g'), gNodes=document.createElementNS(NS,'g');
-    svg.appendChild(gLinks);svg.appendChild(gNodes);
-    const linkEls=links.map(l=>{const e=document.createElementNS(NS,'line');e.setAttribute('class','net-link');
-      e.setAttribute('stroke-width',Math.max(.5,Math.sqrt(l.w)/1.6));gLinks.appendChild(e);return e;});
-    const nodeEls=nodes.map(n=>{
-      const g=document.createElementNS(NS,'g');g.setAttribute('class','net-node');
-      const c=document.createElementNS(NS,'circle');c.setAttribute('r',radius(n));
-      c.setAttribute('fill',n.center?'var(--teal-deep)':tc(n.theme));
-      c.setAttribute('stroke',n.center?'#fff':'var(--surface)');c.setAttribute('stroke-width',n.center?3:1.5);
-      const t=document.createElementNS(NS,'text');t.setAttribute('text-anchor','middle');
-      t.setAttribute('dy',-radius(n)-4);t.textContent=n.center?'Sathish Muthu':n.name;
-      if(n.center)g.classList.add('show-label');
-      g.appendChild(c);g.appendChild(t);gNodes.appendChild(g);
-      // interactions
-      g.addEventListener('mouseenter',ev=>{
-        g.classList.add('show-label');
-        if(!n.center&&tooltip){
-          tooltip.innerHTML=`<div class="tn">${n.name}</div><div class="tm">${n.theme}</div><div style="margin-top:4px;font-size:.74rem">${n.count} shared papers${n.firstYear?` · ${n.firstYear}–${n.lastYear}`:''}</div>`;
-          tooltip.style.opacity=1;
-        }
-      });
-      g.addEventListener('mousemove',ev=>{if(tooltip&&!n.center){const r=svg.getBoundingClientRect();
-        tooltip.style.left=(ev.clientX-r.left+14)+'px';tooltip.style.top=(ev.clientY-r.top+14)+'px';}});
-      g.addEventListener('mouseleave',()=>{if(!n.center)g.classList.remove('show-label');if(tooltip)tooltip.style.opacity=0;});
-      // drag
-      g.addEventListener('pointerdown',ev=>{dragNode=n;n.fixed=true;g.setPointerCapture(ev.pointerId);ev.preventDefault();});
-      return {g,c,t};
-    });
-
-    function onMove(ev){
-      if(!dragNode)return;const r=svg.getBoundingClientRect();
-      dragNode.x=ev.clientX-r.left;dragNode.y=ev.clientY-r.top;dragNode.vx=0;dragNode.vy=0;kick();
-    }
-    function onUp(){if(dragNode){dragNode.fixed=false;dragNode=null;}}
-    svg.addEventListener('pointermove',onMove);
-    addEventListener('pointerup',onUp);
-
-    // simple force sim
-    function step(){
-      const cx=W/2, cy=H/2;
-      for(let i=0;i<nodes.length;i++){
-        const a=nodes[i];if(a.fixed||a.center){if(a.center){a.x=cx;a.y=cy;}continue;}
-        // center gravity
-        a.vx+=(cx-a.x)*0.002; a.vy+=(cy-a.y)*0.002;
-        // repulsion
-        for(let j=0;j<nodes.length;j++){if(i===j)continue;const b=nodes[j];
-          let dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy||1;if(d2<40000){const f=380/d2;a.vx+=dx*f;a.vy+=dy*f;}}
-      }
-      // link spring to center
-      links.forEach(l=>{const b=byId[l.t];if(b.fixed||b.center)return;
-        const desired=90+ (1-Math.sqrt(l.w/maxC))*150;
-        const dx=b.x-cx,dy=b.y-cy,dist=Math.hypot(dx,dy)||1,diff=(desired-dist)/dist*0.06;
-        b.vx-=dx*diff;b.vy-=dy*diff;});
-      nodes.forEach(n=>{if(n.fixed||n.center)return;n.vx*=0.86;n.vy*=0.86;n.x+=n.vx;n.y+=n.vy;
-        n.x=Math.max(20,Math.min(W-20,n.x));n.y=Math.max(24,Math.min(H-16,n.y));});
-      draw();
-    }
     function draw(){
-      links.forEach((l,i)=>{const a=byId[l.s],b=byId[l.t];const e=linkEls[i];
-        e.setAttribute('x1',a.x);e.setAttribute('y1',a.y);e.setAttribute('x2',b.x);e.setAttribute('y2',b.y);
-        const dim=activeTheme&&b.theme!==activeTheme;e.setAttribute('stroke-opacity',dim?.06:.5);
-        e.setAttribute('stroke',dim?'var(--line)':tc(b.theme));});
-      nodes.forEach((n,i)=>{const {g,c,t}=nodeEls[i];g.setAttribute('transform',`translate(${n.x},${n.y})`);
-        t.setAttribute('dy',-radius(n)-4);
-        const dim=activeTheme&&!n.center&&n.theme!==activeTheme;g.style.opacity=dim?.18:1;});
+      const W=svg.clientWidth||900;
+      const H=Math.min(680, Math.max(560, W*0.72));
+      svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+      svg.innerHTML='';
+      const cx=W/2, cy=H*0.52;
+      const R=Math.min(W,H)*0.36;          // collaborator ring radius
+      const labelR=R+16;
+      const hubR=30;
+
+      // Sathish hub at centre
+      const defs=document.createElementNS(NS,'defs');
+      defs.innerHTML='<radialGradient id="hubg"><stop offset="0" stop-color="#0e7c86"/><stop offset="1" stop-color="#0a5960"/></radialGradient>';
+      svg.appendChild(defs);
+
+      // arrange collaborators around a circle, leaving a gap at the very bottom (base) for the hub label
+      const n=collabs.length;
+      const arcStart=-Math.PI/2 + 0.28;         // start just right of top
+      const arcEnd=  Math.PI*1.5 - 0.28;        // full loop minus a gap
+      const span=arcEnd-arcStart;
+
+      // group boundaries for coloured arcs
+      const positions=[];
+      collabs.forEach((c,i)=>{
+        const ang=arcStart + span*(i/(n-1));
+        positions.push(ang);
+      });
+
+      // --- draw group arc bands (outer ring) ---
+      groups.forEach(g=>{
+        const idxs=collabs.map((c,i)=>c.group===g?i:-1).filter(i=>i>=0);
+        if(!idxs.length) return;
+        const a0=positions[idxs[0]]-span/(n-1)*0.5;
+        const a1=positions[idxs[idxs.length-1]]+span/(n-1)*0.5;
+        const rr=labelR+30;
+        const x0=cx+Math.cos(a0)*rr, y0=cy+Math.sin(a0)*rr;
+        const x1=cx+Math.cos(a1)*rr, y1=cy+Math.sin(a1)*rr;
+        const large=(a1-a0)>Math.PI?1:0;
+        const arc=document.createElementNS(NS,'path');
+        arc.setAttribute('d',`M ${x0} ${y0} A ${rr} ${rr} 0 ${large} 1 ${x1} ${y1}`);
+        arc.setAttribute('fill','none');
+        arc.setAttribute('stroke',GROUP_COLORS[g]);
+        arc.setAttribute('stroke-width','5');
+        arc.setAttribute('stroke-linecap','round');
+        arc.setAttribute('opacity',activeGroup&&activeGroup!==g?0.15:0.85);
+        svg.appendChild(arc);
+        // group label at arc midpoint
+        const am=(a0+a1)/2;
+        const lx=cx+Math.cos(am)*(rr+20), ly=cy+Math.sin(am)*(rr+20);
+        const gl=document.createElementNS(NS,'text');
+        gl.setAttribute('x',lx);gl.setAttribute('y',ly);
+        gl.setAttribute('text-anchor','middle');gl.setAttribute('dominant-baseline','middle');
+        gl.setAttribute('class','net-grouplabel');
+        gl.setAttribute('fill',GROUP_COLORS[g]);
+        gl.textContent=g;
+        svg.appendChild(gl);
+      });
+
+      // --- ribbons from hub to each collaborator ---
+      collabs.forEach((c,i)=>{
+        const ang=positions[i];
+        const nx=cx+Math.cos(ang)*R, ny=cy+Math.sin(ang)*R;
+        const dim=activeGroup&&activeGroup!==c.group;
+        const w=1.5+Math.sqrt(c.count/maxC)*7;
+        const rib=document.createElementNS(NS,'path');
+        // quadratic curve bowing toward centre
+        const mx=cx+Math.cos(ang)*R*0.35, my=cy+Math.sin(ang)*R*0.35;
+        rib.setAttribute('d',`M ${cx} ${cy} Q ${mx} ${my} ${nx} ${ny}`);
+        rib.setAttribute('fill','none');
+        rib.setAttribute('stroke',GROUP_COLORS[c.group]);
+        rib.setAttribute('stroke-width',w);
+        rib.setAttribute('stroke-linecap','round');
+        rib.setAttribute('opacity',dim?0.06:0.32);
+        rib.setAttribute('class','net-ribbon');
+        svg.appendChild(rib);
+      });
+
+      // --- collaborator nodes + labels ---
+      collabs.forEach((c,i)=>{
+        const ang=positions[i];
+        const nx=cx+Math.cos(ang)*R, ny=cy+Math.sin(ang)*R;
+        const dim=activeGroup&&activeGroup!==c.group;
+        const r=4+Math.sqrt(c.count/maxC)*7;
+        const node=document.createElementNS(NS,'circle');
+        node.setAttribute('cx',nx);node.setAttribute('cy',ny);node.setAttribute('r',r);
+        node.setAttribute('fill',GROUP_COLORS[c.group]);
+        node.setAttribute('opacity',dim?0.15:1);
+        node.setAttribute('class','net-node');
+        node.style.cursor='pointer';
+        svg.appendChild(node);
+
+        // label
+        const onRight=Math.cos(ang)>=0;
+        const lx=cx+Math.cos(ang)*labelR, ly=cy+Math.sin(ang)*labelR;
+        const lbl=document.createElementNS(NS,'text');
+        lbl.setAttribute('x',lx);lbl.setAttribute('y',ly);
+        lbl.setAttribute('text-anchor',onRight?'start':'end');
+        lbl.setAttribute('dominant-baseline','middle');
+        lbl.setAttribute('class','net-nodelabel');
+        lbl.setAttribute('opacity',dim?0.2:1);
+        // shorten name: first initial + surname
+        const parts=c.name.split(' ');
+        const short=parts.length>1?`${parts[0][0]}. ${parts.slice(1).join(' ')}`:c.name;
+        lbl.textContent=short;
+        // rotate label to follow the circle for readability
+        const deg=ang*180/Math.PI;
+        const rot=onRight?deg:deg+180;
+        lbl.setAttribute('transform',`rotate(${rot} ${lx} ${ly})`);
+        svg.appendChild(lbl);
+
+        const showTip=(ev)=>{
+          const rect=svg.getBoundingClientRect();
+          tooltip.innerHTML=`<b>${c.name}</b><br>${c.count} shared papers · ${c.group}<br><span style="color:var(--muted)">${c.theme} · ${c.firstYear}–${c.lastYear}</span>`;
+          tooltip.style.opacity=1;
+          tooltip.style.left=(ev.clientX-rect.left+12)+'px';
+          tooltip.style.top=(ev.clientY-rect.top+12)+'px';
+        };
+        node.addEventListener('mousemove',showTip);
+        node.addEventListener('mouseleave',()=>tooltip.style.opacity=0);
+      });
+
+      // --- central hub (Sathish) drawn last, on top ---
+      const hub=document.createElementNS(NS,'circle');
+      hub.setAttribute('cx',cx);hub.setAttribute('cy',cy);hub.setAttribute('r',hubR);
+      hub.setAttribute('fill','url(#hubg)');
+      svg.appendChild(hub);
+      const hi=document.createElementNS(NS,'text');
+      hi.setAttribute('x',cx);hi.setAttribute('y',cy);
+      hi.setAttribute('text-anchor','middle');hi.setAttribute('dominant-baseline','central');
+      hi.setAttribute('class','net-hublabel');hi.textContent='SM';
+      svg.appendChild(hi);
+      const hn=document.createElementNS(NS,'text');
+      hn.setAttribute('x',cx);hn.setAttribute('y',cy+hubR+16);
+      hn.setAttribute('text-anchor','middle');
+      hn.setAttribute('class','net-hubname');hn.textContent='Dr. Sathish Muthu';
+      svg.appendChild(hn);
     }
-    window.__redrawNet=draw;
-    let energy=0;
-    function loop(){step();energy++;if(energy<600||dragNode){raf=requestAnimationFrame(loop);}else{raf=null;}}
-    function kick(){energy=0;if(!raf)raf=requestAnimationFrame(loop);}
-    loop();
 
-    // resize
-    let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{W=svg.clientWidth||900;kick();},200);});
+    draw();
+    let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(draw,200);});
 
-    // theme filter toolbar
+    // group filter toolbar
     const bar=document.getElementById('netToolbar');
     if(bar){
-      const themesInNet=[...new Set(D.nodes.map(n=>n.theme))];
-      const order=["Spine","Regenerative Medicine","Systematic Reviews","Research Methodology","AI in Healthcare","GBD / Burden of Disease","Knee & Cartilage","Orthopaedic Rheumatology","Trauma & General Ortho","Original Research"];
-      const ordered=order.filter(t=>themesInNet.includes(t));
       bar.insertAdjacentHTML('beforeend',
-        `<button class="net-chip" data-t="__all"><span class="dot" style="background:var(--teal)"></span>All</button>`+
-        ordered.map(t=>`<button class="net-chip" data-t="${t}"><span class="dot" style="background:${tc(t)}"></span>${t}</button>`).join(''));
+        `<button class="net-chip" data-g="__all"><span class="dot" style="background:var(--teal)"></span>All</button>`+
+        groups.map(g=>`<button class="net-chip" data-g="${g}"><span class="dot" style="background:${GROUP_COLORS[g]}"></span>${g}</button>`).join(''));
       bar.querySelectorAll('.net-chip').forEach(b=>b.addEventListener('click',()=>{
-        const t=b.dataset.t;activeTheme=(t==='__all')?null:t;
-        bar.querySelectorAll('.net-chip').forEach(x=>x.classList.toggle('off',activeTheme&&x.dataset.t!==t&&x.dataset.t!=='__all'));
+        const g=b.dataset.g;activeGroup=(g==='__all')?null:g;
+        bar.querySelectorAll('.net-chip').forEach(x=>x.classList.toggle('off',activeGroup&&x.dataset.g!==g&&x.dataset.g!=='__all'));
         draw();
       }));
     }
