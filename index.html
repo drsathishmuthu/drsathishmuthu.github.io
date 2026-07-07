@@ -154,11 +154,13 @@ h1.name .sn{font-style:italic;color:var(--teal)}
 .pipeline-note b{color:var(--teal-deep)}
 
 /* interests */
-.interest-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
-.interest{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm)}
-.interest h4{font-family:'IBM Plex Mono',monospace;font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{font-size:.84rem;padding:6px 13px;border-radius:100px;background:var(--bg-2);border:1px solid var(--line);color:var(--ink-soft);font-weight:500}
+.interest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+@media(max-width:900px){.interest-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.interest-grid{grid-template-columns:1fr}}
+.interest{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px 26px;box-shadow:var(--shadow-sm)}
+.interest h4{font-family:'IBM Plex Mono',monospace;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:18px}
+.chips{display:flex;flex-wrap:wrap;gap:9px}
+.chip{font-size:.88rem;padding:8px 15px;border-radius:100px;background:var(--bg-2);border:1px solid var(--line);color:var(--ink-soft);font-weight:500}
 
 /* two-col lists (textbooks, peer review) */
 .twocol{display:grid;grid-template-columns:1fr 1fr;gap:20px}
@@ -353,6 +355,7 @@ h1.name .sn{font-style:italic;color:var(--teal)}
         <div class="qual-item"><div class="qd">Fellow — Endoscopic Spine Surgery</div><div class="qi">Gangnam Severance Hospital, Korea</div><div class="qy">2024</div></div>
         <div class="qual-item"><div class="qd">Fellow — Orthopaedic Rheumatology</div><div class="qi">Dr. RML University, Lucknow</div><div class="qy">2020</div></div>
         <div class="qual-item"><div class="qd">Fellow — Regenerative Medicine</div><div class="qi">Intl. Assoc. of Stem Cells &amp; Regenerative Medicine, New Delhi</div><div class="qy">2021</div></div>
+        <div class="qual-item"><div class="qd">Fellow — Sports Medicine</div><div class="qi">IOA Yuva</div><div class="qy">2026</div></div>
       </div>
     </div>
   </div>
@@ -399,6 +402,7 @@ h1.name .sn{font-style:italic;color:var(--teal)}
   <div class="wrap">
     <div class="sec-head reveal"><div class="sec-kicker">Recognition</div><h2 class="sec-title">Selected Honors &amp; Awards</h2></div>
     <div class="honor-list">
+      <div class="honor reveal"><div class="hm">◆</div><div><div class="hn">IOA–Yuva Fellowship 2026</div><div class="ho">Indian Orthopaedic Association</div></div></div>
       <div class="honor reveal"><div class="hm">◆</div><div><div class="hn">Top 2% Global Scientists, 2024 &amp; 2025</div><div class="ho">Stanford–Elsevier Rankings</div></div></div>
       <div class="honor reveal"><div class="hm">◆</div><div><div class="hn">Luiz Vialle Award 2024</div><div class="ho">AO Spine, Switzerland</div></div></div>
       <div class="honor reveal"><div class="hm">◆</div><div><div class="hn">IOA–KOA Ambassador 2023</div><div class="ho">Indian &amp; Korean Orthopaedic Associations</div></div></div>
