@@ -6,7 +6,7 @@
 
   // theme colors
   const THEME_COLORS = {
-    "Spine":"#0e7c86","Regenerative Medicine":"#6a5acd","Systematic Reviews":"#d98a2b",
+    "Spine":"#1667c4","Regenerative Medicine":"#6a5acd","Systematic Reviews":"#e0993a",
     "Research Methodology":"#c0497f","AI in Healthcare":"#2b8a5a","GBD / Burden of Disease":"#3b6fd4",
     "Knee & Cartilage":"#d5604a","Orthopaedic Rheumatology":"#9a7b2e","Trauma & General Ortho":"#5a6b78",
     "Original Research":"#7a8a96"
@@ -36,6 +36,23 @@
   /* ---------- reveal ---------- */
   const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i%5*55)+'ms';io.observe(el);});
+
+  /* ---------- count-up stats ---------- */
+  const fmt=n=>n.toLocaleString('en-US');
+  function countUp(el){
+    const target=+el.dataset.count, suffix=el.dataset.suffix||'';
+    const dur=1600, t0=performance.now();
+    function step(now){
+      const p=Math.min(1,(now-t0)/dur);
+      const eased=1-Math.pow(1-p,3); // ease-out cubic
+      el.textContent=fmt(Math.round(target*eased))+suffix;
+      if(p<1)requestAnimationFrame(step);
+      else el.textContent=fmt(target)+suffix;
+    }
+    requestAnimationFrame(step);
+  }
+  const cio=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){countUp(e.target);cio.unobserve(e.target);}})},{threshold:.5});
+  document.querySelectorAll('.num[data-count]').forEach(el=>cio.observe(el));
 
   /* ---------- helpers ---------- */
   const MONTHS=["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -149,10 +166,10 @@
 
     // group colours
     const GROUP_COLORS={
-      'ORG':'#0e7c86',
-      'AO Spine KFD':'#7c5ccb',
-      'GBD Study':'#c98a2b',
-      'Regenerative / Intl':'#2aa5a0'
+      'ORG':'#1667c4',
+      'AO Spine KFD':'#6a5acd',
+      'GBD Study':'#e0993a',
+      'Regenerative / Intl':'#2b9fd4'
     };
     const GROUP_ORDER=['ORG','AO Spine KFD','GBD Study','Regenerative / Intl'];
 
@@ -179,7 +196,7 @@
 
       // Sathish hub at centre
       const defs=document.createElementNS(NS,'defs');
-      defs.innerHTML='<radialGradient id="hubg"><stop offset="0" stop-color="#0e7c86"/><stop offset="1" stop-color="#0a5960"/></radialGradient>';
+      defs.innerHTML='<radialGradient id="hubg"><stop offset="0" stop-color="#1667c4"/><stop offset="1" stop-color="#0f4a94"/></radialGradient>';
       svg.appendChild(defs);
 
       // arrange collaborators around a circle, leaving a gap at the very bottom (base) for the hub label
