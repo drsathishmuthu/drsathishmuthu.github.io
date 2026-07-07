@@ -228,12 +228,14 @@ h1.name .sn{font-style:italic;color:var(--teal)}
 .social svg{width:16px;height:16px}
 
 /* recent ticker */
-.recent-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.recent-item{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:18px;box-shadow:var(--shadow-sm);transition:transform .2s,box-shadow .2s}
+.recent-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+@media(max-width:900px){.recent-strip{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.recent-strip{grid-template-columns:1fr}}
+.recent-item{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px 24px;box-shadow:var(--shadow-sm);transition:transform .2s,box-shadow .2s}
 .recent-item:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
-.recent-item .rd{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--teal);margin-bottom:8px}
-.recent-item .rt{font-size:.92rem;font-weight:500;color:var(--ink);line-height:1.35;font-family:'Fraunces',serif}
-.recent-item .rj{font-size:.78rem;color:var(--muted);margin-top:8px}
+.recent-item .rd{font-family:'IBM Plex Mono',monospace;font-size:.74rem;color:var(--teal);margin-bottom:10px}
+.recent-item .rt{font-size:1rem;font-weight:500;color:var(--ink);line-height:1.4;font-family:'Fraunces',serif}
+.recent-item .rj{font-size:.82rem;color:var(--muted);margin-top:11px}
 
 /* citation metrics (Scholar-style) */
 .metrics-grid{display:grid;grid-template-columns:300px 1fr;gap:26px;align-items:stretch}
@@ -620,7 +622,7 @@ h1.name .sn{font-style:italic;color:var(--teal)}
       <div class="interest reveal"><h4>Spine</h4><div class="chips"><span class="chip">Lumbar Lordosis</span><span class="chip">Degeneration</span><span class="chip">Disc Disease</span><span class="chip">Fusion &amp; ACDF</span></div></div>
       <div class="interest reveal"><h4>Knee &amp; Cartilage</h4><div class="chips"><span class="chip">Osteoarthritis</span><span class="chip">Subchondral zone</span><span class="chip">Cartilage repair</span><span class="chip">Alignment</span></div></div>
       <div class="interest reveal"><h4>AI &amp; Digital Health</h4><div class="chips"><span class="chip">ML screening</span><span class="chip">Predictive analytics</span><span class="chip">LLMs in ortho</span><span class="chip">CNN imaging</span></div></div>
-      <div class="interest reveal"><h4>Global Health</h4><div class="chips"><span class="chip">GBD collaborator</span><span class="chip">Burden of disease</span><span class="chip">MSK epidemiology</span></div></div>
+      <div class="interest reveal"><h4>Global Health</h4><div class="chips"><span class="chip">GBD study</span><span class="chip">Disease burden</span><span class="chip">MSK epidemiology</span><span class="chip">Health metrics</span></div></div>
     </div>
   </div>
 </section>
