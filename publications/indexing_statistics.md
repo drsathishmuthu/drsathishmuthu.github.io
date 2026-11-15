@@ -118,3 +118,24 @@ PubMed exports do not carry citation counts. Citation totals include the large G
 | Extracellular Vesicles for Therapeutic and Diagnostic Applications | 5 |
 | Stem Cell Investigation | 5 |
 | The Lancet Public Health | 4 |
+
+
+## 4. ResearchGate supplement (15–16 November 2026)
+
+The ResearchGate profile lists 519 research items. After excluding 52 dataset/figure items and matching the rest to the 344 indexed works by normalised title (and DOI), 110 items were unmatched. Of these, 7 were duplicates of indexed works under a different title or version, and 2 preprint/article pairs shared one DOI, leaving **101 additional works**.
+
+| ResearchGate type | Works |
+|---|---|
+| Article | 67 |
+| Conference Paper | 18 |
+| Poster | 9 |
+| Chapter | 2 |
+| Preprint | 2 |
+| Thesis | 1 |
+| Technical Report | 1 |
+| Literature Review | 1 |
+
+| With DOI (Crossref-verified title match) | 48 |
+| Without DOI | 53 |
+
+**Total in repository: 445 works.**
