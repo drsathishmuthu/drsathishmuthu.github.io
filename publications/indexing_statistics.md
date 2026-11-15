@@ -135,7 +135,7 @@ The ResearchGate profile lists 519 research items. After excluding 52 dataset/fi
 | Technical Report | 1 |
 | Literature Review | 1 |
 
-| With DOI (Crossref-verified title match) | 48 |
-| Without DOI | 53 |
+| With DOI (Crossref or ResearchGate record) | 67 |
+| Without DOI | 34 |
 
 **Total in repository: 445 works.**
