@@ -35,7 +35,7 @@ In the CSV, `citable` is `True` for citable works; other values say why not (con
 
 ## Updating
 
-ResearchGate-only works without a DOI (34, mostly conference abstracts and posters) carry the title, journal, year and ResearchGate link; DOIs and full author lists for these can be added from their ResearchGate records.
+ResearchGate-only works without a DOI (34: conference abstracts and posters, and five early papers in journals that do not issue DOIs) carry the title, journal, year and ResearchGate link; DOIs and full author lists for these can be added from their ResearchGate records.
 
 
 Export fresh records from Scopus (BibTeX), Web of Science (BibTeX) and PubMed (MEDLINE), rerun the merge, and replace these three files. Works published after the last export date are not yet in this file and must be added by hand when citing.
