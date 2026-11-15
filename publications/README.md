@@ -26,7 +26,7 @@ This repository is the complete list of Dr Muthu's publications. Use it for all 
 - `source`: `Scopus/WoS/PubMed export (6 Nov 2026)` or `ResearchGate`
 - `rg_url`, `rg_type`: ResearchGate record and item type (ResearchGate-sourced works only)
 
-In the CSV, `citable` is `True` for citable works; other values say why not (conference abstract/poster, BMJ rapid response, convocation proceedings) or flag a preprint under review.
+In the CSV, `citable` is `True` for citable works (a work without a DOI is never citable); other values say why not (conference abstract/poster, BMJ rapid response, convocation proceedings) or flag a preprint under review.
 
 ## Raw URLs (for scripts and Claude)
 

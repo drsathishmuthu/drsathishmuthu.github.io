@@ -139,3 +139,31 @@ The ResearchGate profile lists 519 research items. After excluding 52 dataset/fi
 | Without DOI | 34 |
 
 **Total in repository: 445 works.**
+
+## 5. Whole repository: indexing and citability (16 November 2026)
+
+**Total works: 445**
+
+| Indexing | Works |
+|---|---|
+| Scopus + Web of Science + PubMed | 208 |
+| Scopus + PubMed | 27 |
+| Web of Science + PubMed | 19 |
+| Scopus + Web of Science | 18 |
+| PubMed only | 47 |
+| Scopus only | 23 |
+| Web of Science only | 2 |
+| **Indexed in at least one database** | **344** |
+| Not indexed (ResearchGate only) | 101 |
+
+| Citability | Works |
+|---|---|
+| Citable (has a DOI) | 398 |
+| Citable preprints (under review) | 2 |
+| Not citable: conference abstract/poster | 32 |
+| Not citable: retraction, retraction notice, correction or preface | 5 |
+| Not citable: no DOI | 5 |
+| Not citable: BMJ rapid response | 2 |
+| Not citable: convocation proceedings | 1 |
+
+Rule: a work without a DOI is not citable.
