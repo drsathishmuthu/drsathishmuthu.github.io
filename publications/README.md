@@ -13,7 +13,7 @@ The single source of Dr Muthu's indexed publications, used for self-citation in 
 
 The PDFs themselves are not in this repository (publisher copyright). They live in one flat Google Drive folder:
 
-- Drive folder: **Research / Working (Downloads) / Published PDFs** (Drive ID `1Sagok89ty0ffglQcRpK6S3z-xh7Nu9S2`); on the Clinic PC `D:\My Drive\Research\Working (Downloads)\Published PDFs`
+- Drive folder: **Research / Published PDFs** (Drive ID `1Sagok89ty0ffglQcRpK6S3z-xh7Nu9S2`); on the Clinic PC `D:\My Drive\Research\Published PDFs`
 - File names: `Year_FirstAuthor_ShortTitle.pdf`; certificates, conference abstracts, author lists, the MS thesis and alternate copies are in the `_Other` subfolder
 - `pdf_index.csv` maps each `uid` to its file (`pdf_file`); `pdf_status` is one of `in folder`, `downloaded (open access)`, `free to read - auto-download blocked`, `paywalled`, `no DOI`, `not fetched (non-citable item)`; `get_it_here` links missing works
 - The same index is kept in the folder as `_PDF_INDEX.csv`, and `_TO_DOWNLOAD.csv` there lists citable works still without a PDF, with the file name to save each under
