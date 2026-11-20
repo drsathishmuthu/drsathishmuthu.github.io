@@ -7,6 +7,20 @@ The single source of Dr Muthu's indexed publications, used for self-citation in 
 | `sathish_muthu_publications.bib` | Master BibTeX, one entry per unique work (no abstracts) |
 | `sathish_muthu_publications.csv` | The same records as a table |
 | `indexing_statistics.md` | Per-database and overall indexing statistics, deduplication log |
+| `pdf_index.csv` | Full-text PDF library index: one row per work (same `uid`), with `pdf_status` and the PDF's file name in the library folder |
+
+## Full-text PDF library
+
+The PDFs themselves are not in this repository (publisher copyright). They live in one flat Google Drive folder:
+
+- Drive folder: **Research / Working (Downloads) / Published PDFs** (Drive ID `1Sagok89ty0ffglQcRpK6S3z-xh7Nu9S2`); on the Clinic PC `D:\My Drive\Research\Working (Downloads)\Published PDFs`
+- File names: `Year_FirstAuthor_ShortTitle.pdf`; certificates, conference abstracts, author lists, the MS thesis and alternate copies are in the `_Other` subfolder
+- `pdf_index.csv` maps each `uid` to its file (`pdf_file`); `pdf_status` is one of `in folder`, `downloaded (open access)`, `free to read - auto-download blocked`, `paywalled`, `no DOI`, `not fetched (non-citable item)`; `get_it_here` links missing works
+- The same index is kept in the folder as `_PDF_INDEX.csv`, and `_TO_DOWNLOAD.csv` there lists citable works still without a PDF, with the file name to save each under
+
+To open a paper in a Claude session: look up its `uid` in `pdf_index.csv`, then search Drive for the `pdf_file` name inside the folder above.
+
+Raw URL: https://raw.githubusercontent.com/drsathishmuthu/drsathishmuthu.github.io/main/publications/pdf_index.csv
 
 **Current version:** 445 works.
 
