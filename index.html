@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dr. Sathish Muthu | Orthopaedic &amp; Spine Surgeon-Scientist</title>
-<meta name="description" content="Dr. Sathish Muthu — Orthopaedic & Spine Surgeon-Scientist. Research Head, Orthopaedic Research Group. 480+ publications, h-index 43, 24,000+ citations. Evidence synthesis, regenerative medicine, spine surgery, AI in healthcare.">
+<meta name="description" content="Dr. Sathish Muthu — Orthopaedic & Spine Surgeon-Scientist. Research Head, Orthopaedic Research Group. 480+ publications, h-index 46, 35,000+ citations. Evidence synthesis, regenerative medicine, spine surgery, AI in healthcare.">
 <meta name="author" content="Dr. Sathish Muthu">
 <meta property="og:title" content="Dr. Sathish Muthu | Surgeon-Scientist">
-<meta property="og:description" content="480+ publications · h-index 43 · Top 2% Global Scientist. Spine · Regenerative Medicine · Evidence Synthesis · AI in Healthcare.">
+<meta property="og:description" content="480+ publications · h-index 46 · Top 2% Global Scientist. Spine · Regenerative Medicine · Evidence Synthesis · AI in Healthcare.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://drsathishmuthu.github.io/public/profile.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -232,6 +232,21 @@ h1.name .sn{font-style:italic;color:var(--teal)}
 .social:hover{transform:translateY(-3px);border-color:var(--teal);color:var(--teal)}
 .social svg{width:16px;height:16px}
 
+/* research spotlight */
+.spot-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+@media(max-width:820px){.spot-grid{grid-template-columns:1fr}}
+.spot-card{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:14px;padding:28px 28px 24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column}
+.spot-card .sp-meta{font-family:'IBM Plex Mono',monospace;font-size:.74rem;color:var(--teal);margin-bottom:12px;letter-spacing:.02em}
+.spot-card .sp-title{font-family:'Fraunces',serif;font-size:1.12rem;font-weight:600;line-height:1.4;color:var(--ink);margin:0 0 8px}
+.spot-card .sp-title a{color:inherit}
+.spot-card .sp-title a:hover{color:var(--teal)}
+.spot-card .sp-auth{font-size:.82rem;color:var(--muted);margin-bottom:16px}
+.spot-card .sp-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);margin-bottom:8px}
+.spot-card ul{margin:0;padding-left:1.1rem;color:var(--ink-soft);font-size:.93rem;line-height:1.6}
+.spot-card li{margin-bottom:8px}
+.spot-card .sp-link{margin-top:auto;padding-top:14px;font-size:.84rem;font-weight:600;color:var(--teal)}
+.spot-note{margin-top:18px;font-size:.78rem;color:var(--muted)}
+
 /* recent ticker */
 .recent-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 @media(max-width:900px){.recent-strip{grid-template-columns:repeat(2,1fr)}}
@@ -282,6 +297,7 @@ h1.name .sn{font-style:italic;color:var(--teal)}
   <div class="nav-inner">
     <a href="#top" class="brand" aria-label="Home"><img src="public/logo.png" class="logo-mark" alt="Sathish Muthu"></a>
     <div class="nav-links" id="navLinks">
+      <a href="#spotlight" class="plain">Spotlight</a>
       <a href="#research" class="plain">Research</a>
       <a href="#network" class="plain">Network</a>
       <a href="#qualifications" class="plain">Qualifications</a>
@@ -331,13 +347,26 @@ h1.name .sn{font-style:italic;color:var(--teal)}
 <div class="stats-strip">
   <div class="stats-inner">
     <div class="stat reveal"><div class="num" data-count="480" data-suffix="+">0</div><div class="lab">Publications</div></div>
-    <div class="stat reveal"><div class="num" data-count="43">0</div><div class="lab">h-index</div></div>
-    <div class="stat reveal"><div class="num" data-count="26897" data-suffix="+">0</div><div class="lab">Citations</div></div>
+    <div class="stat reveal"><div class="num" id="heroH" data-count="46">0</div><div class="lab">h-index</div></div>
+    <div class="stat reveal"><div class="num" id="heroCites" data-count="35671" data-suffix="+">0</div><div class="lab">Citations</div></div>
     <div class="stat reveal"><div class="num" data-count="3124" data-suffix="+">0</div><div class="lab">Peer Reviews</div></div>
     <div class="stat reveal"><div class="num" data-count="45" data-suffix="+">0</div><div class="lab">Collaborators</div></div>
     <div class="stat reveal"><div class="num" data-count="163" data-suffix="+">0</div><div class="lab">Editor Records</div></div>
   </div>
 </div>
+
+<!-- RESEARCH SPOTLIGHT (refreshed daily from data.js -> spotlight) -->
+<section id="spotlight" class="tint-warm">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">Research Spotlight</div>
+      <h2 class="sec-title">Just Published</h2>
+      <p class="sec-sub">The newest papers from the group, with what each one found.</p>
+    </div>
+    <div class="spot-grid" id="spotGrid"></div>
+    <p class="spot-note" id="spotNote"></p>
+  </div>
+</section>
 
 <!-- QUALIFICATIONS -->
 <section id="qualifications">
@@ -547,9 +576,9 @@ h1.name .sn{font-style:italic;color:var(--teal)}
         <div class="mp-head">Indices</div>
         <div class="mp-table">
           <div class="th">Metric</div><div class="th r">All</div><div class="th r">Since 2021</div>
-          <div class="rk">Citations</div><div class="rv" id="mCitAll">26,897</div><div class="rv since" id="mCitRec">—</div>
-          <div class="rk">h-index</div><div class="rv" id="mHAll">43</div><div class="rv since" id="mHRec">—</div>
-          <div class="rk">i10-index</div><div class="rv" id="mIAll">118</div><div class="rv since" id="mIRec">—</div>
+          <div class="rk">Citations</div><div class="rv" id="mCitAll">35,671</div><div class="rv since" id="mCitRec">—</div>
+          <div class="rk">h-index</div><div class="rv" id="mHAll">46</div><div class="rv since" id="mHRec">—</div>
+          <div class="rk">i10-index</div><div class="rv" id="mIAll">136</div><div class="rv since" id="mIRec">—</div>
         </div>
       </div>
       <div class="chart-panel reveal">

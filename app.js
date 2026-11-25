@@ -65,6 +65,21 @@
       <div class="pub-tags">${tags}</div></a>`;
   }
 
+  /* ---------- research spotlight ---------- */
+  const sg=document.getElementById('spotGrid');
+  if(sg&&D.spotlight&&D.spotlight.items&&D.spotlight.items.length){
+    const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    sg.innerHTML=D.spotlight.items.slice(0,2).map(p=>`<article class="spot-card">
+      <div class="sp-meta">${esc(p.date||'')} · ${esc(p.s||'')}${p.m?' · '+esc(p.m):''}</div>
+      <h3 class="sp-title"><a href="${p.d}" target="_blank" rel="noopener">${esc(p.t)}</a></h3>
+      ${p.a?`<div class="sp-auth">${esc(p.a)}</div>`:''}
+      <div class="sp-label">Key takeaways</div>
+      <ul>${(p.b||[]).slice(0,2).map(b=>`<li>${esc(b)}</li>`).join('')}</ul>
+      <a class="sp-link" href="${p.d}" target="_blank" rel="noopener">Read the paper →</a></article>`).join('');
+    const sn=document.getElementById('spotNote');
+    if(sn&&D.spotlight.updated)sn.textContent='Updated '+D.spotlight.updated+'. Citation metrics from Google Scholar.';
+  } else if(sg){ const s=document.getElementById('spotlight'); if(s)s.style.display='none'; }
+
   /* ---------- recent strip ---------- */
   const rs=document.getElementById('recentStrip');
   if(rs){
