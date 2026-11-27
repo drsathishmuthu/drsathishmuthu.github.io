@@ -22,7 +22,7 @@ To open a paper in a Claude session: look up its `uid` in `pdf_index.csv`, then 
 
 Raw URL: https://raw.githubusercontent.com/drsathishmuthu/drsathishmuthu.github.io/main/publications/pdf_index.csv
 
-**Current version:** 447 works (2 added 25 Nov 2026 from Google Scholar / Crossref).
+**Current version:** 448 works (2 added 25 Nov and 1 added 27 Nov 2026 from Google Scholar / Crossref).
 
 - 344 works from the Scopus, Web of Science and PubMed author-profile exports of 6 November 2026 (825 raw records deduplicated by DOI, PMID and normalised title + year).
 - 101 further works from the ResearchGate profile (519 items, extracted 15–16 November 2026) that are not in those three exports: early unindexed journal articles, conference abstracts and posters, chapters, preprints and recent papers. Each was checked against the 344 by normalised title and DOI, and DOIs and author lists were taken from Crossref where a record exists. ResearchGate dataset/figure items (52) were left out.

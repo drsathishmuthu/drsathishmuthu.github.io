@@ -138,11 +138,11 @@ The ResearchGate profile lists 519 research items. After excluding 52 dataset/fi
 | With DOI (Crossref or ResearchGate record) | 67 |
 | Without DOI | 34 |
 
-**Total in repository: 447 works.** (2 added 25 Nov 2026 from Google Scholar / Crossref.)
+**Total in repository: 448 works.** (2 added 25 Nov and 1 added 27 Nov 2026 from Google Scholar / Crossref.)
 
 ## 5. Whole repository: indexing and citability (16 November 2026)
 
-**Total works: 447**
+**Total works: 448**
 
 | Indexing | Works |
 |---|---|
@@ -155,10 +155,11 @@ The ResearchGate profile lists 519 research items. After excluding 52 dataset/fi
 | Web of Science only | 2 |
 | **Indexed in at least one database** | **344** |
 | Not indexed (ResearchGate only) | 101 |
+| Not yet indexed (Google Scholar / Crossref additions, 25–27 Nov 2026) | 3 |
 
 | Citability | Works |
 |---|---|
-| Citable (has a DOI) | 398 |
+| Citable (has a DOI) | 401 |
 | Citable preprints (under review) | 2 |
 | Not citable: conference abstract/poster | 32 |
 | Not citable: retraction, retraction notice, correction or preface | 5 |
